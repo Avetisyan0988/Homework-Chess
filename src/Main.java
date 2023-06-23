@@ -116,12 +116,19 @@ public class Main {
     }
 
     public static void input(String[] arr1, String[] arr2, String check) {
+        String[] exampArr = new  String[65];
+        for (int i = 0; i < arr2.length; i++) {
+            exampArr[i] = arr2[i];
+        }
+
         System.out.println();
         System.out.println("Write Your step, Example \"H6 G7\" ");
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
         String[] inputRes = input.split(" ", 2);
         String figure = "";
+        int index1 = -1;
+        int index2 =-1;
 
         for (int i = 0; i < arr1.length; i++) {
             if (arr1[i].equals(inputRes[0])) {
@@ -141,18 +148,134 @@ public class Main {
                 }
 
                 arr2[i] = null;
+                index1 = i;
             }
         }
         for (int i = 0; i < arr1.length; i++) {
             if (arr1[i].equals(inputRes[1])) {
                 arr2[i] = figure;
+                index2 = i;
             }
 
         }
 
+
+       check (exampArr,arr2, arr1, inputRes, figure,check,index1,index2);
         main(arr2);
 
 
+    }
+    public static void arrToNewArr (String[] arr1,String[] arr2){
+        for (int i = 0; i < arr1.length; i++) {
+            arr2[i] = arr1[i];
+        }
+    }
+    public static void check (String[] exampArr,String[] arr2,String[] arr1,String[] inputRes,String figure,String check,int index1, int index2){
+        if (figure.contains("p")){
+            checkP(exampArr,arr2,arr1,figure,index1,index2, check);
+        }else if (figure.contains("r")){
+            checkR(exampArr,arr2,arr1,figure,index1,index2, check);
+        }
+
+    }
+    public static void checkP (String[] exampArr,String[] arr2,String[] arr1,String figure,int index1, int index2,String check){
+        if(figure.contains("B")) {
+            if (((index1 + 8 == index2 && exampArr[index1+8] != null) || (index1 + 8 != index2 && index1 + 7 != index2 && index1 + 9 != index2 ) || (index1 + 7 == index2 && exampArr[index2]==null) || (index1 + 9 == index2 && exampArr[index2]==null)) || (exampArr[index2] != null && exampArr[index2].contains("B") )) {
+                System.out.println("Error step for Black Pawn");
+                for (int i = 0; i < exampArr.length; i++) {
+                    arr2[i] = exampArr[i];
+                }
+
+                input(arr1, arr2, check);
+
+            }
+        }else if (figure.contains("W")){
+            if (((index1 - 8 == index2 && exampArr[index1-8] != null) || (index1 - 8 != index2 && index1 - 7 != index2 && index1 - 9 != index2 )  || (index1 - 7 == index2 && exampArr[index2]==null) || (index1 - 9 == index2 && exampArr[index2]==null)) || (exampArr[index2] != null && exampArr[index2].contains("W") )){
+                System.out.println(exampArr[index2]);
+                for (int i = 0; i < exampArr.length; i++) {
+                    arr2[i] = exampArr[i];
+                }
+                System.out.println("Error step for White Pawn");
+                input(arr1, arr2, check);
+
+            }
+
+
+        }
+        else {
+           arrToNewArr(exampArr,arr2);
+            System.out.println("unknown error");
+            input(arr1, arr2, check);
+
+        }
+
+    }
+    public static void checkR(String[] exampArr,String[] arr2,String[] arr1,String figure,int index1, int index2,String check){
+
+        if ((index1-index2)%8!=0 && arr1[index2].indexOf(arr1[index1].charAt(1))==-1 ){
+            arrToNewArr(exampArr,arr2);
+            System.out.println("Error step for Rook");
+            input(arr1, arr2, check);
+        }else if( exampArr[index2]!=null &&  exampArr[index2].indexOf(exampArr[index1].charAt(0))!=-1){
+            arrToNewArr(exampArr,arr2);
+            System.out.println("Error step for Rook");
+            input(arr1, arr2, check);
+        }
+        if (arr1[index2].indexOf(arr1[index1].charAt(1))!=-1 ){
+
+            if (index1 - index2<0) {
+                for (int i = index1; i < index2 + 1; i++) {
+                  checkR1(exampArr,arr2,arr1,figure,i,index2, check);
+                }
+            } else if (index1 - index2>0) {
+                for (int i = index1; i > index2 - 1; i--) {
+                    checkR1(exampArr,arr2,arr1,figure,i,index2, check);
+
+                }
+            }
+        } else if((index1-index2)%8==0){
+            if (index1 - index2<0) {
+                for (int i = index1; i < index2 + 1; i++) {
+
+                    checkR1(exampArr,arr2,arr1,figure,i,index2, check);
+                    i = i +7;
+                }
+            } else if (index1 - index2>0) {
+                for (int i = index1; i > index2 - 1; i--) {
+                    checkR1(exampArr,arr2,arr1,figure,i,index2, check);
+                    i = i -7;
+
+                }
+            }
+
+
+        }
+
+    }
+    public static void checkR1(String[] exampArr,String[] arr2,String[] arr1,String figure,int i, int index2,String check){
+        if (figure.contains("B")) {
+            if (arr2[i] != null && i != index2 ) {
+                arrToNewArr(exampArr,arr2);
+                System.out.println("Error step for Rook");
+                input(arr1, arr2, check);
+            }else if (i == index2 && exampArr[i]!=null && exampArr[i].contains("B")) {
+                arrToNewArr(exampArr,arr2);
+                System.out.println("Error step for Rook");
+                input(arr1, arr2, check);
+
+            }
+        }else if(figure.contains("W")){
+            if (arr2[i] != null && i != index2 ) {
+                arrToNewArr(exampArr,arr2);
+                System.out.println("Error step for Rook");
+                input(arr1, arr2, check);
+            }else if (i == index2 && exampArr[i]!=null && exampArr[i].contains("W")) {
+                arrToNewArr(exampArr,arr2);
+                System.out.println("Error step for Rook");
+                input(arr1, arr2, check);
+
+            }
+        }
     }
 
 }
