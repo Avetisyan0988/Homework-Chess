@@ -1,3 +1,5 @@
+import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
+
 import java.util.Scanner;
 
 public class Main {
@@ -293,14 +295,19 @@ public class Main {
     }
 
     private static void checkP(String[] exampArr, String[] arr2, String[] arr1, String figure, int index1, int index2, String check) {
+
         if (figure.contains("B")) {
-            if (((index1 + 8 == index2 && exampArr[index1 + 8] != null) || (index1 + 8 != index2 && index1 + 7 != index2 && index1 + 9 != index2) || (index1 + 7 == index2 && exampArr[index2] == null) || (index1 + 9 == index2 && exampArr[index2] == null)) || (exampArr[index2] != null && exampArr[index2].contains("B"))) {
+            if (arr1[index1].contains("7") && index2 == index1 +16 && exampArr[index2] == null){
+                System.out.print(" ");
+            }else if (((index1 + 8 == index2 && exampArr[index1 + 8] != null) || (index1 + 8 != index2 && index1 + 7 != index2 && index1 + 9 != index2) || (index1 + 7 == index2 && exampArr[index2] == null) || (index1 + 9 == index2 && exampArr[index2] == null)) || (exampArr[index2] != null && exampArr[index2].contains("B"))) {
                 errorMassage("Pawn", exampArr, arr2, arr1, check);
 
 
             }
         } else if (figure.contains("W")) {
-            if (((index1 - 8 == index2 && exampArr[index1 - 8] != null) || (index1 - 8 != index2 && index1 - 7 != index2 && index1 - 9 != index2) || (index1 - 7 == index2 && exampArr[index2] == null) || (index1 - 9 == index2 && exampArr[index2] == null)) || (exampArr[index2] != null && exampArr[index2].contains("W"))) {
+            if (arr1[index1].contains("2") && index2 == index1 -16 && exampArr[index2] == null){
+                System.out.print(" ");
+            }else if (((index1 - 8 == index2 && exampArr[index1 - 8] != null) || (index1 - 8 != index2 && index1 - 7 != index2 && index1 - 9 != index2) || (index1 - 7 == index2 && exampArr[index2] == null) || (index1 - 9 == index2 && exampArr[index2] == null)) || (exampArr[index2] != null && exampArr[index2].contains("W"))) {
                 errorMassage("Pawn", exampArr, arr2, arr1, check);
             }
         } else {
