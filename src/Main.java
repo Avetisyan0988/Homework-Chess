@@ -124,11 +124,11 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         String inputString = scanner.nextLine().toUpperCase();
 
-        if (!inputString.contains(" ")){
+        if (!inputString.contains(" ")) {
             System.out.println("You forgot to put a space");
             input(arr1, arr2, check);
         }
-        if (inputString.length() != 5){
+        if (inputString.length() != 5) {
             System.out.println("You wrote the command incorrectly");
             input(arr1, arr2, check);
 
@@ -197,7 +197,7 @@ public class Main {
     }
 
     private static void checkK(String[] exampArr, String[] arr2, String[] arr1, String figure, int index1, int index2, String check) {
-        if (index1 -1 !=index2 && index1 +1 != index2 && index1 +8 != index2 &&  index1 -8 != index2 && index1 +7 != index2 && index1 -7 != index2 && index1 +9 != index2 && index1 -9 != index2){
+        if (index1 - 1 != index2 && index1 + 1 != index2 && index1 + 8 != index2 && index1 - 8 != index2 && index1 + 7 != index2 && index1 - 7 != index2 && index1 + 9 != index2 && index1 - 9 != index2) {
             errorMassage("King", exampArr, arr2, arr1, check);
         }
         if (exampArr[index2] != null && exampArr[index2].indexOf(figure.charAt(0)) != -1) {
