@@ -7,7 +7,7 @@ public class Main {
         String[] numbering = {"A", "B", "C", "D", "E", "F", "G", "H"};
         String[] boardInArray = new String[66];
         String[] board = new String[64];
-        doskaChess(board);
+        chessBoard(board);
         arrayStr(boardInArray);
         String check = "jjj";
 
@@ -102,7 +102,7 @@ public class Main {
 
     }
 
-    private static void doskaChess(String[] board) {
+    private static void chessBoard(String[] board) {
         int x = 8;
         for (int i = 0; i < 64; i += 8) {
             if (i % 8 == 0 && i != 0) {
