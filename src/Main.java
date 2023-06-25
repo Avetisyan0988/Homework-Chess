@@ -5,7 +5,7 @@ public class Main {
 
 
         String[] numbering = {"A", "B", "C", "D", "E", "F", "G", "H"};
-        String[] boardInArray = new String[65];
+        String[] boardInArray = new String[66];
         String[] board = new String[64];
         doskaChess(board);
         arrayStr(boardInArray);
@@ -21,6 +21,11 @@ public class Main {
         printNumbering(numbering);
         printPlus();
         rows(boardInArray);
+        if (boardInArray[65] != null) {
+            System.out.println(" ");
+            System.out.println(args[65]);
+            boardInArray[65] = null;
+        }
         input(board, boardInArray, check);
 
     }
@@ -135,6 +140,8 @@ public class Main {
         }
         String[] inputRes = inputString.split(" ", 2);
         String figure = "";
+        String figureColor = " ";
+        boolean b = true;
         int index1 = -1;
         int index2 = -1;
 
@@ -152,8 +159,10 @@ public class Main {
                 }
                 if (!figure.contains("W")) {
                     arr2[64] = "B";
+                    figureColor = "W";
                 } else {
                     arr2[64] = "W";
+                    figureColor = "B";
                 }
 
                 arr2[i] = null;
@@ -170,6 +179,24 @@ public class Main {
 
 
         check(exampArr, arr2, arr1, figure, check, index1, index2);
+        for (int i = 0; i < exampArr.length; i++) {
+            if (arr2[i] != null && arr2[i].contains(figure.charAt(0) + "K")) {
+                index1 = i;
+                break;
+            }
+
+        }
+        checkCheck(exampArr, arr2, arr1, figure, index1, check, b);
+
+        for (int i = 0; i < exampArr.length; i++) {
+            if (arr2[i] != null && arr2[i].contains(figureColor + "K")) {
+                index1 = i;
+                break;
+            }
+
+        }
+        b = false;
+        checkCheck(exampArr, arr2, arr1, figureColor, index1, check, b);
         main(arr2);
 
 
@@ -193,6 +220,7 @@ public class Main {
         } else if (figure.contains("K")) {
             checkK(exampArr, arr2, arr1, figure, index1, index2, check);
         }
+
 
     }
 
@@ -256,10 +284,10 @@ public class Main {
         for (int i = index1; i < arr1.length && i > -1; i--) {
 
             if (i % 8 == 0) {
-                bStepList[i] = s;
+                bStepList[i] = s + "-";
                 break;
             }
-            bStepList[i] = s;
+            bStepList[i] = s + "-";
 
         }
     }
@@ -295,17 +323,17 @@ public class Main {
     private static void checkP(String[] exampArr, String[] arr2, String[] arr1, String figure, int index1, int index2, String check) {
 
         if (figure.contains("B")) {
-            if (arr1[index1].contains("7") && index2 == index1 +16 && exampArr[index2] == null){
+            if (arr1[index1].contains("7") && index2 == index1 + 16 && exampArr[index2] == null) {
                 System.out.print(" ");
-            }else if (((index1 + 8 == index2 && exampArr[index1 + 8] != null) || (index1 + 8 != index2 && index1 + 7 != index2 && index1 + 9 != index2) || (index1 + 7 == index2 && exampArr[index2] == null) || (index1 + 9 == index2 && exampArr[index2] == null)) || (exampArr[index2] != null && exampArr[index2].contains("B"))) {
+            } else if (((index1 + 8 == index2 && exampArr[index1 + 8] != null) || (index1 + 8 != index2 && index1 + 7 != index2 && index1 + 9 != index2) || (index1 + 7 == index2 && exampArr[index2] == null) || (index1 + 9 == index2 && exampArr[index2] == null)) || (exampArr[index2] != null && exampArr[index2].contains("B"))) {
                 errorMassage("Pawn", exampArr, arr2, arr1, check);
 
 
             }
         } else if (figure.contains("W")) {
-            if (arr1[index1].contains("2") && index2 == index1 -16 && exampArr[index2] == null){
+            if (arr1[index1].contains("2") && index2 == index1 - 16 && exampArr[index2] == null) {
                 System.out.print(" ");
-            }else if (((index1 - 8 == index2 && exampArr[index1 - 8] != null) || (index1 - 8 != index2 && index1 - 7 != index2 && index1 - 9 != index2) || (index1 - 7 == index2 && exampArr[index2] == null) || (index1 - 9 == index2 && exampArr[index2] == null)) || (exampArr[index2] != null && exampArr[index2].contains("W"))) {
+            } else if (((index1 - 8 == index2 && exampArr[index1 - 8] != null) || (index1 - 8 != index2 && index1 - 7 != index2 && index1 - 9 != index2) || (index1 - 7 == index2 && exampArr[index2] == null) || (index1 - 9 == index2 && exampArr[index2] == null)) || (exampArr[index2] != null && exampArr[index2].contains("W"))) {
                 errorMassage("Pawn", exampArr, arr2, arr1, check);
             }
         } else {
@@ -407,5 +435,147 @@ public class Main {
         input(arr1, arr2, check);
     }
 
+    private static void checkCheck(String[] exampArr, String[] arr2, String[] arr1, String figure, int index1, String check, boolean b) {
 
+        String figureColor = "W";
+        if (figure.contains("W")) {
+            figureColor = "B";
+        }
+        checkCheck3(0, 7, index1, arr1, arr2, figureColor, exampArr, check, b);
+        checkCheck3(+1, 9, index1, arr1, arr2, figureColor, exampArr, check, b);
+        checkCheck3(0, -9, index1, arr1, arr2, figureColor, exampArr, check, b);
+        checkCheck3(+1, -7, index1, arr1, arr2, figureColor, exampArr, check, b);
+
+        checkCheck1(8, index1, exampArr, arr1, arr2, figureColor, figure, check, b);
+        checkCheck1(-8, index1, exampArr, arr1, arr2, figureColor, figure, check, b);
+        checkCheck4( index1, exampArr, arr1, arr2, figureColor, check);
+        checkCheck5(exampArr,arr2,arr1,figureColor,index1,check);
+
+
+    }
+
+    private static void checkCheck1(int x, int index1, String[] exampArr, String[] arr1, String[] arr2, String figureColor, String figure, String check, boolean b) {
+
+        for (int i = index1; i < arr1.length && i > -1; i = i + x) {
+            if (i != index1 && arr2[i] != null && exampArr[index1].indexOf(figure.charAt(0)) != -1) {
+                break;
+            }
+
+            checkCheck2(i, index1, arr2, figureColor, "r", exampArr, arr1, check, b);
+
+        }
+        for (int i = index1; i < arr1.length && i > -1; i++) {
+            if (i != index1 && arr2[i] != null && exampArr[index1].indexOf(figure.charAt(0)) != -1) {
+                break;
+            }
+            if ((i + 1) % 8 == 0) {
+                checkCheck2(i, index1, arr2, figureColor, "r", exampArr, arr1, check, b);
+                break;
+            }
+            checkCheck2(i, index1, arr2, figureColor, "r", exampArr, arr1, check, b);
+
+
+        }
+        for (int i = index1; i < arr1.length && i > -1; i--) {
+            if (i != index1 && arr2[i] != null && exampArr[index1].indexOf(figure.charAt(0)) != -1) {
+                break;
+            }
+            if (i % 8 == 0) {
+                checkCheck2(i, index1, arr2, figureColor, "r", exampArr, arr1, check, b);
+
+                break;
+            }
+            checkCheck2(i, index1, arr2, figureColor, "r", exampArr, arr1, check, b);
+
+
+        }
+    }
+
+    private static void checkCheck2(int i, int index1, String[] arr2, String figureColor, String figure, String[] exampArr, String[] arr1, String check, boolean b) {
+        if (i != index1 && arr2[i] != null && arr2[i].contains(figureColor) && (arr2[i].contains("Q") || arr2[i].contains(figure))) {
+            if (b) {
+                System.out.println("You cannot make that move because the king is in check.");
+                arrToNewArr(exampArr, arr2);
+                input(arr1, arr2, check);
+            }
+            arr2[65] = "Attention!!! Check is declared.";
+
+        }
+    }
+
+    private static void checkCheck3(int y, int x, int index1, String[] arr1, String[] arr2, String figureColor, String[] exampArr, String check, boolean b) {
+        for (int i = index1; i < arr1.length && i > -1; i = i + x) {
+            if (i != index1 && arr2[i] != null && arr2[i].indexOf(exampArr[index1].charAt(0)) != -1) {
+                break;
+            }
+            if ((i + y) % 8 == 0) {
+                checkCheck2(i, index1, arr2, figureColor, "b", exampArr, arr1, check, b);
+                break;
+            }
+            checkCheck2(i, index1, arr2, figureColor, "b", exampArr, arr1, check, b);
+
+        }
+    }
+
+    private static void checkCheck4( int index1, String[] exampArr, String[] arr1, String[] arr2, String figureColor,  String check) {
+
+
+        if (figureColor.contains("B")) {
+            if (arr2[index1 - 7] != null && arr2[index1 - 7].contains("Bp") || arr2[index1 - 9] != null && arr2[index1 - 9].contains("Bp")) {
+                if (arr2[64].contains("W")) {
+                    System.out.println("You cannot make that move because the king is in check.");
+                    arrToNewArr(exampArr, arr2);
+                    input(arr1, arr2, check);
+                } else {
+                    arr2[65] = "Attention!!! Check is declared.";
+                }
+
+            } else if (figureColor.contains("W")) {
+                if (arr2[index1 + 7] != null && arr2[index1 + 7].contains("Wp") || arr2[index1 + 9] != null && arr2[index1 + 9].contains("Wp")) {
+                    if (arr2[64].contains("B")) {
+                        System.out.println("You cannot make that move because the king is in check.");
+                        arrToNewArr(exampArr, arr2);
+                        input(arr1, arr2, check);
+                    } else {
+                        arr2[65] = "Attention!!! Check is declared.";
+                    }
+
+                }
+
+
+            }
+        }
+    }
+
+    private static void checkCheck5(String[] exampArr, String[] arr2, String[] arr1, String figureColor, int index1, String check) {
+        for (int i = 0; i < exampArr.length; i++) {
+            if(arr2[i] != null && arr2[i].contains("Wn") && figureColor.contains("W")){
+
+                if (i == index1 + 15 || i == index1 - 15 || i == index1 + 17 || i == index1 - 17 || i == index1 + 10 || i == index1 - 10 || i == index1 + 6 || i == index1 - 6) {
+                    if (arr2[64].contains("B")) {
+                        System.out.println("You cannot make that move because the king is in check.");
+                        arrToNewArr(exampArr, arr2);
+                        input(arr1, arr2, check);
+                    } else {
+                        arr2[65] = "Attention!!! Check is declared.";
+                    }
+                }
+            }
+            if(arr2[i] != null && arr2[i].contains("Bn") && figureColor.contains("B")){
+
+                if (i == index1+9999 || i == index1 + 15 || i == index1 - 15 || i == index1 + 17 || i == index1 - 17 || i == index1 + 10 || i == index1 - 10 || i == index1 + 6 || i == index1 - 6) {
+                    if (arr2[64].contains("W")) {
+                        System.out.println("You cannot make that move because the king is in check.");
+                        arrToNewArr(exampArr, arr2);
+                        input(arr1, arr2, check);
+                    } else {
+                        arr2[65] = "Attention!!! Check is declared.";
+                    }
+                }
+            }
+
+        }
+
+
+    }
 }
